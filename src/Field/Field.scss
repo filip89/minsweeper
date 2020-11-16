@@ -8,11 +8,6 @@
     border: 2px outset darkgray;
     line-height: 100%;
 
-    // &:hover:not(&--disabled) {
-    // cursor: pointer;
-    // filter: brightness(120%);
-    // }
-
     &--press,
     &--revealed {
         border-style: inset;
@@ -22,13 +17,15 @@
         background-color: rgb(255, 0, 0);
     }
 
-    &__wrong-mark-container {
-        position: relative;
-    }
-
     &__wrong-mark {
-        position: absolute;
-        font-size: 20px;
+        position: relative;
+
+        > svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     &__flag {

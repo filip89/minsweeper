@@ -8,6 +8,10 @@ export class Field {
     marked: boolean;
     detonated: boolean;
 
+    get revealable(): boolean {
+        return !this.revealed && !this.marked;
+    }
+
     constructor(row: number, column: number) {
         this.id = `${row}${column}`;
         this.row = row;
@@ -18,4 +22,5 @@ export class Field {
         this.marked = false;
         this.detonated = false;
     }
+
 }

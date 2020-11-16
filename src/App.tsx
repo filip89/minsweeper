@@ -11,7 +11,7 @@ export interface AppProps {}
 //TODO rename minefield to data and rename this component to Minefield
 export interface AppState {
     minefield: Minefield;
-    minefieldDisabled: boolean;
+    disabled: boolean;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -19,7 +19,7 @@ class App extends React.Component<AppProps, AppState> {
 
     state: AppState = {
         minefield: createMinefield(defaultSettings),
-        minefieldDisabled: false,
+        disabled: false,
     };
 
     toggleMarkField(field: FieldModel): void {
@@ -38,7 +38,7 @@ class App extends React.Component<AppProps, AppState> {
             this.revealWronglyMarkedFields();
             this.setState({
                 minefield: this.minefield,
-                minefieldDisabled: true,
+                disabled: true,
             });
         } else {
             this.revealField(copiedField);
@@ -86,17 +86,31 @@ class App extends React.Component<AppProps, AppState> {
         return JSON.parse(JSON.stringify(this.state.minefield));
     }
 
+    stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        if (this.state.disabled) {
+            event.stopPropagation();
+        }
+    };
+
+    onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        event.preventDefault();
+    };
+
     render() {
         return (
             <div className="game">
                 <header className="game__header"></header>
-                <div className="game__fields">
+                <div
+                    className="game__fields"
+                    onMouseDownCapture={this.stopMouseEventPropagationIfDisabled}
+                    onMouseUpCapture={this.stopMouseEventPropagationIfDisabled}
+                    onContextMenuCapture={this.onContextMenu}
+                >
                     {this.state.minefield.map((row, rowIndex) => (
                         <div className="game__row" key={rowIndex}>
                             {row.map((field) => (
                                 <Field
                                     key={field.id}
-                                    disabled={this.state.minefieldDisabled}
                                     data={field}
                                     toggleMark={() => this.toggleMarkField(field)}
                                     reveal={() => this.onUserReveal(field)}

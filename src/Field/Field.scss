@@ -1,0 +1,66 @@
+.field {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: gray;
+    border: 2px outset darkgray;
+    line-height: 100%;
+
+    // &:hover:not(&--disabled) {
+    // cursor: pointer;
+    // filter: brightness(120%);
+    // }
+
+    &--press,
+    &--revealed {
+        border-style: inset;
+    }
+
+    &--detonated {
+        background-color: rgb(255, 0, 0);
+    }
+
+    &__wrong-mark-container {
+        position: relative;
+    }
+
+    &__wrong-mark {
+        position: absolute;
+        font-size: 20px;
+    }
+
+    &__flag {
+        transform: rotateY(180deg);
+    }
+
+    &__adjacent-mines {
+        font-weight: bold;
+
+        &--1 {
+            color: darkblue;
+        }
+        &--2 {
+            color: darkgreen;
+        }
+        &--3 {
+            color: darkred;
+        }
+        &--4 {
+            color: purple;
+        }
+        &--5 {
+            color: brown;
+        }
+        &--6 {
+            color: yellow;
+        }
+        &--7 {
+            color: gold;
+        }
+        &--8 {
+            color: burlywood;
+        }
+    }
+}

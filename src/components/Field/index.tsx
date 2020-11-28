@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Field as FieldModel } from '../models/Field';
+import { Field as FieldModel } from '../../models/Field';
 import './Field.scss';
 import { BsFillFlagFill } from 'react-icons/bs';
 import { GiTellerMine } from 'react-icons/gi';
@@ -14,7 +14,7 @@ const shouldCache: (prevProps: FieldProps, nextProps: FieldProps) => boolean = (
 
 export interface FieldProps {
     data: FieldModel;
-    reveal: () => void;
+    attemptReveal: () => void;
     toggleMark: () => void;
 }
 
@@ -29,7 +29,7 @@ const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
 
     function onMouseUp(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
         if (event.button === 0 && field.revealable) {
-            props.reveal();
+            props.attemptReveal();
         }
     }
 

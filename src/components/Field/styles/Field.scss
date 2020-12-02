@@ -1,3 +1,5 @@
+@import './MineAdjacentFieldColors.scss';
+
 .field {
     display: inline-flex;
     justify-content: center;
@@ -36,28 +38,28 @@
         font-weight: bold;
 
         &--1 {
-            color: darkblue;
+            color: $mine-count-1;
         }
         &--2 {
-            color: darkgreen;
+            color: $mine-count-2;
         }
         &--3 {
-            color: darkred;
+            color: $mine-count-3;
         }
         &--4 {
-            color: purple;
+            color: $mine-count-4;
         }
         &--5 {
-            color: brown;
+            color: $mine-count-5;
         }
         &--6 {
-            color: yellow;
+            color: $mine-count-6;
         }
         &--7 {
-            color: gold;
+            color: $mine-count-7;
         }
         &--8 {
-            color: burlywood;
+            color: $mine-count-8;
         }
     }
 }

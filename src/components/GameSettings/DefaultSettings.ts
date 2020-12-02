@@ -1,4 +1,4 @@
-import { MinefieldSettings } from './models/MinefieldSettings';
+import { MinefieldSettings } from '../../models/MinefieldSettings';
 
 const defaultSettings: MinefieldSettings = {
     rows: 20,

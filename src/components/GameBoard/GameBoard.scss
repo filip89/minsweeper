@@ -1,0 +1,12 @@
+.game-board {
+    display: table;
+    margin: 100px auto;
+    background-color: rgb(0, 153, 145);
+    border-radius: 4px 4px 0 0;
+  
+    &__status {
+        height: 100px;
+    }
+  
+  }
+  

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Field as FieldModel } from '../../models/Field';
-import './Field.scss';
+import './styles/Field.scss';
 import { BsFillFlagFill } from 'react-icons/bs';
 import { GiTellerMine } from 'react-icons/gi';
 import { MdClose } from 'react-icons/md';

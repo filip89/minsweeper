@@ -3,22 +3,20 @@ import './Minefield.scss';
 import { Minefield as MinefieldModel } from '../../models/Minefield';
 import { Field as FieldModel } from '../../models/Field';
 import Field from '../Field';
-import defaultSettings from '../GameSettings/DefaultSettings';
-import createMinefield from '../../utilities/MinefieldBuilder';
 import { tryToRevealField } from '../../utilities/MinefieldManager';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
-export interface MinefieldProps {}
-
-//TODO rename minefield to data and rename this component to Minefield
-export interface MinefieldState {
+export interface MinefieldProps {
     minefield: MinefieldModel;
+    onMinefieldChange: (minefield: MinefieldModel) => void;
+}
+
+export interface MinefieldState {
     disabled: boolean;
 }
 
 class Minefield extends React.Component<MinefieldProps, MinefieldState> {
     state: MinefieldState = {
-        minefield: createMinefield(defaultSettings),
         disabled: false,
     };
 
@@ -26,9 +24,7 @@ class Minefield extends React.Component<MinefieldProps, MinefieldState> {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
         cloneField.marked = !cloneField.marked;
-        console.log(cloneField.marked);
-
-        this.setState({ minefield: minefield });
+        this.props.onMinefieldChange(minefield);
     }
 
     onFieldRevealAttempt({ row, column }: FieldModel): void {
@@ -36,13 +32,13 @@ class Minefield extends React.Component<MinefieldProps, MinefieldState> {
         const cloneField: FieldModel = minefield[row][column];
         const success: boolean = tryToRevealField(minefield, cloneField);
         this.setState({
-            minefield: minefield,
             disabled: !success,
         });
+        this.props.onMinefieldChange(minefield);
     }
 
     getMinefieldClone(): MinefieldModel {
-        return cloneDeep<MinefieldModel>(this.state.minefield);
+        return cloneDeep<MinefieldModel>(this.props.minefield);
     }
 
     stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
@@ -63,7 +59,7 @@ class Minefield extends React.Component<MinefieldProps, MinefieldState> {
                 onMouseUpCapture={this.stopMouseEventPropagationIfDisabled}
                 onContextMenuCapture={this.onContextMenu}
             >
-                {this.state.minefield.map((row, rowIndex) => (
+                {this.props.minefield.map((row, rowIndex) => (
                     <div className="minefield__row" key={rowIndex}>
                         {row.map((field) => (
                             <Field

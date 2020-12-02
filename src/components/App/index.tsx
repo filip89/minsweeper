@@ -7,8 +7,10 @@ import defaultSettings from '../GameSettings/DefaultSettings';
 import createMinefield from '../../utilities/MinefieldBuilder';
 import { Minefield } from '../../models/Minefield';
 
+const initialMinefield: Minefield = createMinefield(defaultSettings);
+
 const App: React.FC = () => {
-    const [minefield, setMinefield] = React.useState(createMinefield(defaultSettings));
+    const [minefield, setMinefield] = React.useState<Minefield>(initialMinefield);
     const [enabled, setEnabled] = React.useState<boolean>(true);
 
     function handleSettingsApply(settings: MinefieldSettings): void {

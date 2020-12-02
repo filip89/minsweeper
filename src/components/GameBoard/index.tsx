@@ -6,14 +6,21 @@ import './GameBoard.scss';
 
 export interface GameBoardProps {
     minefield: MinefieldModel;
+    enabled: boolean;
     onMinefieldChange: (minefield: MinefieldModel) => void;
+    onMineDetonated: () => void;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ minefield, onMinefieldChange }) => {
+const GameBoard: React.FC<GameBoardProps> = (props) => {
     return (
         <div className="game-board">
             <GameStatus />
-            <Minefield minefield={minefield} onMinefieldChange={onMinefieldChange} />
+            <Minefield
+                minefield={props.minefield}
+                onMinefieldChange={props.onMinefieldChange}
+                enabled={props.enabled}
+                onMineDetonated={props.onMineDetonated}
+            />
         </div>
     );
 };

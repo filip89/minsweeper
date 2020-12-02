@@ -9,19 +9,30 @@ import { Minefield } from '../../models/Minefield';
 
 const App: React.FC = () => {
     const [minefield, setMinefield] = React.useState(createMinefield(defaultSettings));
+    const [enabled, setEnabled] = React.useState<boolean>(true);
 
     function handleSettingsApply(settings: MinefieldSettings): void {
         setMinefield(createMinefield(settings));
+        setEnabled(true);
     }
 
     function handleMinefieldChange(minefield: Minefield): void {
         setMinefield(minefield);
     }
 
+    function handleMineDetonation(): void {
+        setEnabled(false);
+    }
+
     return (
         <div>
             <GameSettings onApply={handleSettingsApply} />
-            <GameBoard minefield={minefield} onMinefieldChange={handleMinefieldChange} />
+            <GameBoard
+                minefield={minefield}
+                onMinefieldChange={handleMinefieldChange}
+                enabled={enabled}
+                onMineDetonated={handleMineDetonation}
+            />
         </div>
     );
 };

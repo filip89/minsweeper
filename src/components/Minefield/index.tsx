@@ -8,18 +8,12 @@ import { cloneDeep } from 'lodash';
 
 export interface MinefieldProps {
     minefield: MinefieldModel;
+    enabled: boolean;
     onMinefieldChange: (minefield: MinefieldModel) => void;
+    onMineDetonated: () => void;
 }
 
-export interface MinefieldState {
-    disabled: boolean;
-}
-
-class Minefield extends React.Component<MinefieldProps, MinefieldState> {
-    state: MinefieldState = {
-        disabled: false,
-    };
-
+class Minefield extends React.Component<MinefieldProps> {
     toggleMarkField({ row, column }: FieldModel): void {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
@@ -31,10 +25,8 @@ class Minefield extends React.Component<MinefieldProps, MinefieldState> {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
         const success: boolean = tryToRevealField(minefield, cloneField);
-        this.setState({
-            disabled: !success,
-        });
         this.props.onMinefieldChange(minefield);
+        if (!success) this.props.onMineDetonated();
     }
 
     getMinefieldClone(): MinefieldModel {
@@ -42,7 +34,7 @@ class Minefield extends React.Component<MinefieldProps, MinefieldState> {
     }
 
     stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-        if (this.state.disabled) {
+        if (!this.props.enabled) {
             event.stopPropagation();
         }
     };

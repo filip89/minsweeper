@@ -13,10 +13,12 @@ const App: React.FC = () => {
     const [settings, setSettings] = useState(defaultSettings);
     const [minefield, setMinefield] = useState<Minefield>(initialMinefield);
     const [enabled, setEnabled] = useState<boolean>(true);
+    const [isPlaying, setIsPlaying] = useState(false); //when first field marked or revealed until minfield reset
 
     function resetMinefield(settings: MinefieldSettings): void {
-        setMinefield(createMinefield(settings));
+        setIsPlaying(false);
         if (!enabled) setEnabled(true);
+        setMinefield(createMinefield(settings));
     }
 
     function handleSettingsApply(settings: MinefieldSettings): void {
@@ -28,12 +30,11 @@ const App: React.FC = () => {
         resetMinefield(settings);
     }
 
-    function handleMinefieldChange(minefield: Minefield): void {
+    function handleMinefieldChange(minefield: Minefield, mineDetonated: boolean = false): void {
+        if (mineDetonated) {
+            setEnabled(false);
+        } else if (!isPlaying) setIsPlaying(true);
         setMinefield(minefield);
-    }
-
-    function handleMineDetonation(): void {
-        setEnabled(false);
     }
 
     return (
@@ -44,7 +45,7 @@ const App: React.FC = () => {
                 minefield={minefield}
                 onMinefieldChange={handleMinefieldChange}
                 enabled={enabled}
-                onMineDetonated={handleMineDetonation}
+                isPlaying={isPlaying}
             />
         </div>
     );

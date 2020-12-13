@@ -9,8 +9,7 @@ import { cloneDeep } from 'lodash';
 export interface MinefieldProps {
     minefield: MinefieldModel;
     enabled: boolean;
-    onMinefieldChange: (minefield: MinefieldModel) => void;
-    onMineDetonated: () => void;
+    onMinefieldChange: (minefield: MinefieldModel, mineDetonated?: boolean) => void;
 }
 
 class Minefield extends React.Component<MinefieldProps> {
@@ -25,8 +24,7 @@ class Minefield extends React.Component<MinefieldProps> {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
         const success: boolean = tryToRevealField(minefield, cloneField);
-        this.props.onMinefieldChange(minefield);
-        if (!success) this.props.onMineDetonated();
+        this.props.onMinefieldChange(minefield, !success);
     }
 
     getMinefieldClone(): MinefieldModel {

@@ -9,34 +9,40 @@ const shouldCache: (prevProps: FieldProps, nextProps: FieldProps) => boolean = (
     if (prevProps.data.marked !== nextProps.data.marked) return false;
     if (prevProps.data.revealed !== nextProps.data.revealed) return false;
     if (prevProps.data.detonated !== nextProps.data.detonated) return false;
+    if (prevProps.data.beingPressed !== nextProps.data.beingPressed) return false;
     return true;
 };
 
 export interface FieldProps {
     data: FieldModel;
-    attemptReveal: () => void;
+    leftMouseUp: () => void;
     toggleMark: () => void;
+    mouseEnter: () => void;
+    leftMouseDown: () => void;
 }
 
 const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
     const field = props.data;
 
     function onMouseDown(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
-        if (event.button === 2 && !field.revealed) {
+        if (event.button === 0) {
+            props.leftMouseDown();
+        } else if (!field.revealed && event.button === 2) {
             props.toggleMark();
         }
     }
 
     function onMouseUp(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
-        if (event.button === 0 && field.revealable) {
-            props.attemptReveal();
+        if (event.button === 0) {
+            props.leftMouseUp();
         }
     }
 
     function getConditionalClassNames(): string {
         let classNames = '';
-        if (field.revealed) classNames += ' field--revealed';
         if (field.detonated) classNames += ' field--detonated';
+        if (field.revealed) classNames += ' field--revealed';
+        else if (field.beingPressed) classNames = ' field--pressed';
         return classNames;
     }
 
@@ -79,7 +85,12 @@ const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
     }
 
     return (
-        <div className={'field' + getConditionalClassNames()} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+        <div
+            className={'field' + getConditionalClassNames()}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseEnter={props.mouseEnter}
+        >
             {getView()}
         </div>
     );

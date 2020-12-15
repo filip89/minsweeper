@@ -12,7 +12,15 @@ export interface MinefieldProps {
     onMinefieldChange: (minefield: MinefieldModel, mineDetonated?: boolean) => void;
 }
 
+export interface MinefieldState {
+    mouseDown: boolean;
+}
+
 class Minefield extends React.Component<MinefieldProps> {
+    state: MinefieldState = {
+        mouseDown: false,
+    };
+
     toggleMarkField({ row, column }: FieldModel): void {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
@@ -20,7 +28,7 @@ class Minefield extends React.Component<MinefieldProps> {
         this.props.onMinefieldChange(minefield);
     }
 
-    onFieldRevealAttempt({ row, column }: FieldModel): void {
+    atemptFieldReveal({ row, column }: FieldModel): void {
         let minefield = this.getMinefieldClone();
         const cloneField: FieldModel = minefield[row][column];
         const success: boolean = tryToRevealField(minefield, cloneField);
@@ -29,6 +37,18 @@ class Minefield extends React.Component<MinefieldProps> {
 
     getMinefieldClone(): MinefieldModel {
         return cloneDeep<MinefieldModel>(this.props.minefield);
+    }
+
+    updateFieldBeingPressed(field?: FieldModel): void {
+        let minefield = this.getMinefieldClone();
+        minefield.forEach((row) => {
+            row.forEach((field) => (field.beingPressed = false));
+        });
+        if (field) {
+            const cloneField: FieldModel = minefield[field.row][field.column];
+            cloneField.beingPressed = true;
+        }
+        this.props.onMinefieldChange(minefield);
     }
 
     stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
@@ -41,6 +61,38 @@ class Minefield extends React.Component<MinefieldProps> {
         event.preventDefault();
     };
 
+    handleMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        if (event.button === 0) {
+            this.setState({ mouseDown: false });
+        }
+    };
+
+    handleMouseLeave = (): void => {
+        if (this.state.mouseDown) {
+            this.setState({ mouseDown: false });
+            this.updateFieldBeingPressed();
+        }
+    };
+
+    handleLeftMouseDownOnField(field: FieldModel): void {
+        this.setState({ mouseDown: true });
+        if (field.revealable) {
+            this.updateFieldBeingPressed(field);
+        }
+    }
+
+    handleLeftMouseUpOnField(field: FieldModel): void {
+        if (this.state.mouseDown && field.revealable) {
+            this.atemptFieldReveal(field);
+        }
+    }
+
+    handleMouseEnterField(field: FieldModel): void {
+        if (this.state.mouseDown) {
+            this.updateFieldBeingPressed(field.revealable ? field : undefined);
+        }
+    }
+
     render() {
         return (
             <div
@@ -48,6 +100,8 @@ class Minefield extends React.Component<MinefieldProps> {
                 onMouseDownCapture={this.stopMouseEventPropagationIfDisabled}
                 onMouseUpCapture={this.stopMouseEventPropagationIfDisabled}
                 onContextMenuCapture={this.onContextMenu}
+                onMouseLeave={this.handleMouseLeave}
+                onMouseUp={this.handleMouseUp}
             >
                 {this.props.minefield.map((row, rowIndex) => (
                     <div className="minefield__row" key={rowIndex}>
@@ -56,7 +110,9 @@ class Minefield extends React.Component<MinefieldProps> {
                                 key={field.id}
                                 data={field}
                                 toggleMark={() => this.toggleMarkField(field)}
-                                attemptReveal={() => this.onFieldRevealAttempt(field)}
+                                leftMouseDown={() => this.handleLeftMouseDownOnField(field)}
+                                leftMouseUp={() => this.handleLeftMouseUpOnField(field)}
+                                mouseEnter={() => this.handleMouseEnterField(field)}
                             ></Field>
                         ))}
                     </div>

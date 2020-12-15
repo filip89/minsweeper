@@ -7,6 +7,7 @@ export class Field {
     revealed: boolean;
     marked: boolean;
     detonated: boolean;
+    beingPressed: boolean;
 
     get revealable(): boolean {
         return !this.revealed && !this.marked;
@@ -21,6 +22,7 @@ export class Field {
         this.revealed = false;
         this.marked = false;
         this.detonated = false;
+        this.beingPressed = false;
     }
 
 }

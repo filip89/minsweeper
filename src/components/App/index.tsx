@@ -14,10 +14,12 @@ const App: React.FC = () => {
     const [minefield, setMinefield] = useState<Minefield>(initialMinefield);
     const [enabled, setEnabled] = useState<boolean>(true); //disabled when game won or lost
     const [isPlaying, setIsPlaying] = useState(false); //when first field clicked - until reset
+    const [won, setWon] = useState(false);
 
     function resetMinefield(settings: MinefieldSettings): void {
         setIsPlaying(false);
-        if (!enabled) setEnabled(true);
+        setWon(false);
+        setEnabled(true);
         setMinefield(createMinefield(settings));
     }
 
@@ -31,9 +33,14 @@ const App: React.FC = () => {
     }
 
     function handleMinefieldChange(minefield: Minefield, mineDetonated: boolean = false): void {
-        if (noMinesLeft(minefield) || mineDetonated) {
+        if (noMinesLeft(minefield)) {
             setEnabled(false);
-        } else if (!isPlaying) setIsPlaying(true);
+            setWon(true);
+        } else if (mineDetonated) {
+            setEnabled(false);
+        } else if (!isPlaying) {
+            setIsPlaying(true);
+        }
         setMinefield(minefield);
     }
 
@@ -50,6 +57,7 @@ const App: React.FC = () => {
                 onMinefieldChange={handleMinefieldChange}
                 enabled={enabled}
                 isPlaying={isPlaying}
+                won={won}
             />
         </div>
     );

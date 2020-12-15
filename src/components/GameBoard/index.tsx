@@ -9,13 +9,14 @@ export interface GameBoardProps {
     enabled: boolean;
     onMinefieldChange: (minefield: MinefieldModel, mineDetonated?: boolean) => void;
     onReset: () => void;
-    isPlaying: boolean
+    isPlaying: boolean;
+    won: boolean;
 }
 
 const GameBoard: React.FC<GameBoardProps> = (props) => {
     return (
         <div className="game-board">
-            <GameStatus minefield={props.minefield} onReset={props.onReset} isPlaying={props.isPlaying} enabled={props.enabled} />
+            <GameStatus minefield={props.minefield} onReset={props.onReset} isPlaying={props.isPlaying} enabled={props.enabled} won={props.won} />
             <Minefield
                 minefield={props.minefield}
                 onMinefieldChange={props.onMinefieldChange}

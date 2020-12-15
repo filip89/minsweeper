@@ -6,6 +6,7 @@ export interface GameStatusProps {
     onReset: () => void;
     isPlaying: boolean;
     enabled: boolean;
+    won: boolean;
 }
 
 const GameStatus: React.FC<GameStatusProps> = (props) => {
@@ -39,11 +40,18 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
         }, 0);
     }
 
+    function getSmileyFace(): string {
+        if (!props.enabled) {
+            return props.won ? ':)' : ':(';
+        }
+        return ':|';
+    }
+
     return (
         <header className="game-board__status">
             <div>{getMarkedFieldsCount()}</div>
             <button type="button" onClick={props.onReset}>
-                :)
+                {getSmileyFace()}
             </button>
             <div>{time}</div>
         </header>

@@ -1,6 +1,6 @@
 import { Field } from '../models/Field';
 import { Minefield } from '../models/Minefield';
-import getAdjacentFields from './AdjacentFieldsGetter';
+import { getAdjacentFields } from './getAdjacentFields';
 
 export function tryToRevealField(minefield: Minefield, field: Field): boolean {
     let success: boolean;
@@ -48,9 +48,9 @@ function revealWronglyMarkedFields(minefield: Minefield): void {
 }
 
 function revealAdjacentFields(minefield: Minefield, field: Field): void {
-    const adjacentFields: Field[] = getAdjacentFields(minefield, field);
+    const adjacentFields: (Field | undefined)[] = getAdjacentFields(minefield, field);
     adjacentFields.forEach((adjacentField) => {
-        if (!adjacentField.revealed && !adjacentField.marked) {
+        if (adjacentField && !adjacentField.revealed && !adjacentField.marked) {
             revealField(minefield, adjacentField);
         }
     });

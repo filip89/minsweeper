@@ -1,7 +1,7 @@
 import { Field } from '../models/Field';
 import { Minefield } from '../models/Minefield';
 import { MinefieldSettings } from '../models/MinefieldSettings';
-import getAdjacentFields from './AdjacentFieldsGetter';
+import { getAdjacentFields } from './getAdjacentFields';
 
 export default function createMinefield(gameSettings: MinefieldSettings): Minefield {
     const minefield: Minefield = generateEmptyMinefield(gameSettings.rows, gameSettings.columns);

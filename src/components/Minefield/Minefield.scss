@@ -1,3 +1,7 @@
-.minefield__row {
+.minefield {
     display: flex;
+    justify-content: center;
+    &__row {
+        display: flex;
+    }
 }

@@ -58,6 +58,7 @@ const App: React.FC = () => {
                 enabled={enabled}
                 isPlaying={isPlaying}
                 won={won}
+                mineCount={settings.mines}
             />
         </div>
     );

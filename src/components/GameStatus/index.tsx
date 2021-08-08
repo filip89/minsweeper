@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Minefield } from '../../models/Minefield';
+import { CgSmileSad, CgSmileMouthOpen, CgSmileNeutral } from 'react-icons/cg';
+import './GameStatus.scss';
 
 export interface GameStatusProps {
+    mineCount: number;
     minefield: Minefield;
     onReset: () => void;
     isPlaying: boolean;
@@ -30,6 +33,7 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
         }
     }, [props.enabled, props.isPlaying, time]);
 
+    //TODO count manually?
     function getMarkedFieldsCount(): number {
         return props.minefield.reduce<number>((acc, row) => {
             return (
@@ -40,21 +44,30 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
         }, 0);
     }
 
-    function getSmileyFace(): string {
-        if (!props.enabled) {
-            return props.won ? ':)' : ':(';
-        }
-        return ':|';
+    function getMineCountDisplay(): string {
+        let minesLeft: number = props.mineCount - getMarkedFieldsCount();
+        return getCounterDisplay(minesLeft);
+    }
+
+    function getSmileyFace() {
+        if (props.enabled) return <CgSmileNeutral />;
+        return props.won ? <CgSmileMouthOpen fill="yellow" /> : <CgSmileSad />;
+    }
+
+    function getCounterDisplay(count: number): string {
+        if (count >= 999) return (999).toString();
+        if (count <= -99) return (-99).toString();
+        return ('00' + count).slice(-3);
     }
 
     return (
-        <header className="game-board__status">
-            <div>{getMarkedFieldsCount()}</div>
-            <button type="button" onClick={props.onReset}>
+        <div className="game-board__status game-status">
+            <div className="game-status__counter">{getMineCountDisplay()}</div>
+            <a className="game-status__smiley" role="button" onClick={props.onReset}>
                 {getSmileyFace()}
-            </button>
-            <div>{time}</div>
-        </header>
+            </a>
+            <div className="game-status__counter">{getCounterDisplay(time)}</div>
+        </div>
     );
 };
 

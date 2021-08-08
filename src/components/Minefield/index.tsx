@@ -103,20 +103,22 @@ class Minefield extends React.Component<MinefieldProps> {
                 onMouseLeave={this.handleMouseLeave}
                 onMouseUp={this.handleMouseUp}
             >
-                {this.props.minefield.map((row, rowIndex) => (
-                    <div className="minefield__row" key={rowIndex}>
-                        {row.map((field) => (
-                            <Field
-                                key={field.id}
-                                data={field}
-                                toggleMark={() => this.toggleMarkField(field)}
-                                leftMouseDown={() => this.handleLeftMouseDownOnField(field)}
-                                leftMouseUp={() => this.handleLeftMouseUpOnField(field)}
-                                mouseEnter={() => this.handleMouseEnterField(field)}
-                            ></Field>
-                        ))}
-                    </div>
-                ))}
+                <div>
+                    {this.props.minefield.map((row, rowIndex) => (
+                        <div className="minefield__row" key={rowIndex}>
+                            {row.map((field) => (
+                                <Field
+                                    key={field.id}
+                                    data={field}
+                                    toggleMark={() => this.toggleMarkField(field)}
+                                    leftMouseDown={() => this.handleLeftMouseDownOnField(field)}
+                                    leftMouseUp={() => this.handleLeftMouseUpOnField(field)}
+                                    mouseEnter={() => this.handleMouseEnterField(field)}
+                                ></Field>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }

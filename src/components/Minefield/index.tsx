@@ -68,40 +68,29 @@ class Minefield extends React.Component<MinefieldProps> {
     };
 
     handleMouseLeave = (): void => {
-        if (this.state.mouseDown) {
-            this.setState({ mouseDown: false });
-            this.updateFieldBeingPressed();
-        }
+        if (this.state.mouseDown) this.setState({ mouseDown: false });
     };
 
-    handleLeftMouseDownOnField(field: FieldModel): void {
-        this.setState({ mouseDown: true });
-        if (field.revealable) {
-            this.updateFieldBeingPressed(field);
-        }
-    }
+    onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        if (event.button === 0) this.setState({ mouseDown: true });
+    };
 
-    handleLeftMouseUpOnField(field: FieldModel): void {
+    handleFieldLeftMouseUp(field: FieldModel): void {
         if (this.state.mouseDown && field.revealable) {
             this.atemptFieldReveal(field);
-        }
-    }
-
-    handleMouseEnterField(field: FieldModel): void {
-        if (this.state.mouseDown) {
-            this.updateFieldBeingPressed(field.revealable ? field : undefined);
         }
     }
 
     render() {
         return (
             <div
-                className="minefield"
+                className={'minefield' + (this.state.mouseDown ? ' minefield--pressed' : '')}
                 onMouseDownCapture={this.stopMouseEventPropagationIfDisabled}
                 onMouseUpCapture={this.stopMouseEventPropagationIfDisabled}
                 onContextMenuCapture={this.onContextMenu}
                 onMouseLeave={this.handleMouseLeave}
                 onMouseUp={this.handleMouseUp}
+                onMouseDown={this.onMouseDown}
             >
                 <div>
                     {this.props.minefield.map((row, rowIndex) => (
@@ -111,9 +100,7 @@ class Minefield extends React.Component<MinefieldProps> {
                                     key={field.id}
                                     data={field}
                                     toggleMark={() => this.toggleMarkField(field)}
-                                    leftMouseDown={() => this.handleLeftMouseDownOnField(field)}
-                                    leftMouseUp={() => this.handleLeftMouseUpOnField(field)}
-                                    mouseEnter={() => this.handleMouseEnterField(field)}
+                                    leftMouseUp={() => this.handleFieldLeftMouseUp(field)}
                                 ></Field>
                             ))}
                         </div>

@@ -17,17 +17,13 @@ export interface FieldProps {
     data: FieldModel;
     leftMouseUp: () => void;
     toggleMark: () => void;
-    mouseEnter: () => void;
-    leftMouseDown: () => void;
 }
 
 const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
     const field = props.data;
 
     function onMouseDown(event: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
-        if (event.button === 0) {
-            props.leftMouseDown();
-        } else if (!field.revealed && event.button === 2) {
+        if (!field.revealed && event.button === 2) {
             props.toggleMark();
         }
     }
@@ -42,6 +38,7 @@ const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
         let classNames = '';
         if (field.detonated) classNames += ' field--detonated';
         if (field.revealed) classNames += ' field--revealed';
+        else if (field.marked) classNames += ' field--marked';
         else if (field.beingPressed) classNames = ' field--pressed';
         return classNames;
     }
@@ -89,7 +86,6 @@ const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
             className={'field' + getConditionalClassNames()}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
-            onMouseEnter={props.mouseEnter}
         >
             {getView()}
         </div>

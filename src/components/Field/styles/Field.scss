@@ -1,5 +1,11 @@
 @import './MineAdjacentFieldColors.scss';
 
+.minefield--pressed {
+    .field:not(.field--marked):hover {
+        border-style: inset;
+    }
+}
+
 .field {
     display: inline-flex;
     justify-content: center;
@@ -10,7 +16,6 @@
     border: 2px outset darkgray;
     line-height: 100%;
 
-    &--pressed,
     &--revealed {
         border-style: inset;
     }
@@ -37,6 +42,7 @@
     &__adjacent-mines {
         font-weight: bold;
 
+        //TODO sass for
         &--1 {
             color: $mine-count-1;
         }

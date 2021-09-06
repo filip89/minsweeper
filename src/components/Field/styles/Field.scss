@@ -42,30 +42,10 @@
     &__adjacent-mines {
         font-weight: bold;
 
-        //TODO sass for
-        &--1 {
-            color: $mine-count-1;
-        }
-        &--2 {
-            color: $mine-count-2;
-        }
-        &--3 {
-            color: $mine-count-3;
-        }
-        &--4 {
-            color: $mine-count-4;
-        }
-        &--5 {
-            color: $mine-count-5;
-        }
-        &--6 {
-            color: $mine-count-6;
-        }
-        &--7 {
-            color: $mine-count-7;
-        }
-        &--8 {
-            color: $mine-count-8;
+        @for $i from 1 through 8 {
+            &--#{$i} {
+                color: map-get($mine-count-colors, $i);
+            }
         }
     }
 }

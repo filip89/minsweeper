@@ -3,11 +3,12 @@ import Minefield from '../Minefield';
 import { Minefield as MinefieldModel } from '../../models/Minefield';
 import GameStatus from '../GameStatus';
 import './GameBoard.scss';
+import { GameAction } from '../../game-reducer/actions';
 
 export interface GameBoardProps {
     minefield: MinefieldModel;
     enabled: boolean;
-    onMinefieldChange: (minefield: MinefieldModel, mineDetonated?: boolean) => void;
+    gameDispatch: React.Dispatch<GameAction>,
     onReset: () => void;
     isPlaying: boolean;
     won: boolean;
@@ -20,7 +21,7 @@ const GameBoard: React.FC<GameBoardProps> = (props) => {
             <GameStatus mineCount={props.mineCount} minefield={props.minefield} onReset={props.onReset} isPlaying={props.isPlaying} enabled={props.enabled} won={props.won} />
             <Minefield
                 minefield={props.minefield}
-                onMinefieldChange={props.onMinefieldChange}
+                gameDispatch={props.gameDispatch}
                 enabled={props.enabled}
             />
         </div>

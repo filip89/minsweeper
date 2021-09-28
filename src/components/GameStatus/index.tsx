@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
-import { Minefield } from '../../models/Minefield';
+import React, { useContext, useEffect } from 'react';
 import { CgSmileSad, CgSmileMouthOpen, CgSmileNeutral } from 'react-icons/cg';
 import './GameStatus.scss';
+import { GameContext } from '../../game-context';
 
 export interface GameStatusProps {
     mineCount: number;
-    minefield: Minefield;
     onReset: () => void;
-    isPlaying: boolean;
-    enabled: boolean;
-    won: boolean;
 }
 
 const GameStatus: React.FC<GameStatusProps> = (props) => {
     const [time, setTime] = React.useState(1);
+    const { minefield, enabled, isPlaying, won } = useContext(GameContext);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
@@ -25,17 +22,17 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
         return () => clearTimeout(timeout);
 
         function shouldCount(): boolean {
-            return props.isPlaying && props.enabled;
+            return isPlaying && enabled;
         }
 
         function shouldReset(): boolean {
-            return !props.isPlaying;
+            return !isPlaying;
         }
-    }, [props.enabled, props.isPlaying, time]);
+    }, [enabled, isPlaying, time]);
 
     //TODO count manually?
     function getMarkedFieldsCount(): number {
-        return props.minefield.reduce<number>((acc, row) => {
+        return minefield.reduce<number>((acc, row) => {
             return (
                 row.reduce<number>((rowAcc, field) => {
                     return field.marked ? rowAcc + 1 : rowAcc;
@@ -50,8 +47,8 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
     }
 
     function getSmileyFace() {
-        if (props.enabled) return <CgSmileNeutral />;
-        return props.won ? <CgSmileMouthOpen fill="yellow" /> : <CgSmileSad />;
+        if (enabled) return <CgSmileNeutral />;
+        return won ? <CgSmileMouthOpen fill="yellow" /> : <CgSmileSad />;
     }
 
     function getCounterDisplay(count: number): string {

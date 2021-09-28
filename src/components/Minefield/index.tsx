@@ -1,15 +1,11 @@
 import React from 'react';
 import './Minefield.scss';
-import { Minefield as MinefieldModel } from '../../models/Minefield';
 import { Field as FieldModel } from '../../models/Field';
 import Field from '../Field';
-import { GameAction, markFieldAction, pressFieldAction } from '../../game-reducer/actions';
+import { markFieldAction, pressFieldAction } from '../../game-reducer/actions';
+import { GameContext } from '../../game-context';
 
-export interface MinefieldProps {
-    minefield: MinefieldModel;
-    enabled: boolean;
-    gameDispatch: React.Dispatch<GameAction>,
-}
+export interface MinefieldProps {}
 
 export interface MinefieldState {
     mouseDown: boolean;
@@ -20,8 +16,11 @@ class Minefield extends React.Component<MinefieldProps> {
         mouseDown: false,
     };
 
+    static contextType = GameContext;
+    context!: React.ContextType<typeof GameContext>;
+
     stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-        if (!this.props.enabled) {
+        if (!this.context.enabled) {
             event.stopPropagation();
         }
     };
@@ -46,7 +45,7 @@ class Minefield extends React.Component<MinefieldProps> {
 
     handleFieldLeftMouseUp(field: FieldModel): void {
         if (this.state.mouseDown && field.revealable) {
-            this.props.gameDispatch(pressFieldAction(field))
+            this.context.dispatch(pressFieldAction(field));
         }
     }
 
@@ -62,13 +61,13 @@ class Minefield extends React.Component<MinefieldProps> {
                 onMouseDown={this.onMouseDown}
             >
                 <div>
-                    {this.props.minefield.map((row, rowIndex) => (
+                    {this.context.minefield.map((row, rowIndex) => (
                         <div className="minefield__row" key={rowIndex}>
                             {row.map((field) => (
                                 <Field
                                     key={field.id}
                                     data={field}
-                                    toggleMark={() => this.props.gameDispatch(markFieldAction(field))}
+                                    toggleMark={() => this.context.dispatch(markFieldAction(field))}
                                     leftMouseUp={() => this.handleFieldLeftMouseUp(field)}
                                 ></Field>
                             ))}

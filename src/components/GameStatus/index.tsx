@@ -58,7 +58,7 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
     }
 
     return (
-        <div className="game-board__status game-status">
+        <div className="game-status">
             <div className="game-status__counter">{getMineCountDisplay()}</div>
             <a className="game-status__smiley" role="button" onClick={props.onReset}>
                 {getSmileyFace()}

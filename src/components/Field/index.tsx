@@ -73,20 +73,14 @@ const Field: React.FC<FieldProps> = React.memo<FieldProps>((props) => {
 
     function getRevealedMinelessView(): JSX.Element | '' {
         return field.adjacentMines ? (
-            <span className={'field__adjacent-mines field__adjacent-mines--' + field.adjacentMines}>
-                {field.adjacentMines}
-            </span>
+            <span className={'field--adjacent-mines-' + field.adjacentMines}>{field.adjacentMines}</span>
         ) : (
             ''
         );
     }
 
     return (
-        <div
-            className={'field' + getConditionalClassNames()}
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-        >
+        <div className={'field' + getConditionalClassNames()} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
             {getView()}
         </div>
     );

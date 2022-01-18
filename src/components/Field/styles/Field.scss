@@ -1,7 +1,7 @@
 @import './MineAdjacentFieldColors.scss';
 
 .minefield--pressed {
-    .field:not(.field--marked):hover {
+    .field:hover:not(.field--marked) {
         border-style: inset;
     }
 }
@@ -24,6 +24,13 @@
         background-color: rgb(255, 0, 0);
     }
 
+    @for $i from 1 through 8 {
+        &--adjacent-mines-#{$i} {
+            font-weight: bold;
+            color: map-get($mine-count-colors, $i);
+        }
+    }
+
     &__wrong-mark {
         position: relative;
 
@@ -37,15 +44,5 @@
 
     &__flag {
         transform: rotateY(180deg);
-    }
-
-    &__adjacent-mines {
-        font-weight: bold;
-
-        @for $i from 1 through 8 {
-            &--#{$i} {
-                color: map-get($mine-count-colors, $i);
-            }
-        }
     }
 }

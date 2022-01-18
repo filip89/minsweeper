@@ -11,7 +11,9 @@ export interface GameBoardProps {
 const GameBoard: React.FC<GameBoardProps> = (props) => {
     return (
         <div className="game-board">
-            <GameStatus mineCount={props.mineCount} onReset={props.onReset} />
+            <div className="game-board__status">
+                <GameStatus mineCount={props.mineCount} onReset={props.onReset} />
+            </div>
             <Minefield />
         </div>
     );

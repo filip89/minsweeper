@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { CgSmileSad, CgSmileMouthOpen, CgSmileNeutral } from 'react-icons/cg';
 import './GameStatus.scss';
 import { GameContext } from '../../game-context';
+import { getMarkedFieldsCount } from '../../utilities/getMarkedFieldsCount';
 
 export interface GameStatusProps {
     mineCount: number;
@@ -11,6 +12,8 @@ export interface GameStatusProps {
 const GameStatus: React.FC<GameStatusProps> = (props) => {
     const [time, setTime] = React.useState(1);
     const { minefield, enabled, isPlaying, won } = useContext(GameContext);
+
+    const markedFieldsCount = useMemo(() => getMarkedFieldsCount(minefield), [minefield]);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
@@ -30,19 +33,8 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
         }
     }, [enabled, isPlaying, time]);
 
-    //TODO count manually?
-    function getMarkedFieldsCount(): number {
-        return minefield.reduce<number>((acc, row) => {
-            return (
-                row.reduce<number>((rowAcc, field) => {
-                    return field.marked ? rowAcc + 1 : rowAcc;
-                }, 0) + acc
-            );
-        }, 0);
-    }
-
     function getMineCountDisplay(): string {
-        let minesLeft: number = props.mineCount - getMarkedFieldsCount();
+        let minesLeft: number = props.mineCount - markedFieldsCount;
         return getCounterDisplay(minesLeft);
     }
 

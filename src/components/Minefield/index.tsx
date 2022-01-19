@@ -20,7 +20,7 @@ class Minefield extends React.Component<MinefieldProps> {
     context!: React.ContextType<typeof GameContext>;
 
     stopMouseEventPropagationIfDisabled = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-        if (!this.context.enabled) {
+        if (this.context.status === 'won' || this.context.status === 'lost') {
             event.stopPropagation();
         }
     };

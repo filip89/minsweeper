@@ -6,9 +6,7 @@ import createMinefield from './utilities/MinefieldBuilder';
 
 const initialGameState: GameState = {
     minefield: createMinefield(defaultSettings),
-    enabled: true,
-    isPlaying: false,
-    won: false,
+    status: 'pristine'
 };
 
 export type GameContextModel = GameState & { dispatch: React.Dispatch<GameAction> };

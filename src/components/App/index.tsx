@@ -11,9 +11,7 @@ import { GameContext } from '../../game-context';
 
 const initialGameState: GameState = {
     minefield: createMinefield(defaultSettings),
-    enabled: true,
-    isPlaying: false,
-    won: false,
+    status: 'pristine'
 };
 
 const App: React.FC = () => {

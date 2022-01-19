@@ -6,25 +6,17 @@ interface TimerProps {}
 
 const Timer: React.FC<TimerProps> = () => {
     const [time, setTime] = useState(0);
-    const { enabled, isPlaying } = useContext(GameContext);
+    const { status } = useContext(GameContext);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
-        if (shouldCount()) {
+        if (status === 'playing') {
             timeout = setTimeout(() => setTime(time + 1), 1000);
-        } else if (shouldReset()) {
+        } else if (status === 'won' || status === 'lost') {
             setTime(0);
         }
         return () => clearTimeout(timeout);
-
-        function shouldCount(): boolean {
-            return isPlaying && enabled;
-        }
-
-        function shouldReset(): boolean {
-            return !isPlaying && enabled;
-        }
-    }, [enabled, isPlaying, time]);
+    }, [status, time]);
 
     return <>{getCounterDisplay(time)}</>;
 };

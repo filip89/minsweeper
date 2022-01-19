@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { CgSmileSad, CgSmileMouthOpen, CgSmileNeutral } from 'react-icons/cg';
 import './GameStatus.scss';
 import { GameContext } from '../../game-context';
@@ -12,7 +12,7 @@ export interface GameStatusProps {
 }
 
 const GameStatus: React.FC<GameStatusProps> = (props) => {
-    const { minefield, enabled, won } = useContext(GameContext);
+    const { minefield, status } = useContext(GameContext);
 
     const markedFieldsCount = useMemo(() => getMarkedFieldsCount(minefield), [minefield]);
 
@@ -22,8 +22,8 @@ const GameStatus: React.FC<GameStatusProps> = (props) => {
     }
 
     function getSmileyFace() {
-        if (enabled) return <CgSmileNeutral />;
-        return won ? <CgSmileMouthOpen fill="yellow" /> : <CgSmileSad />;
+        if (status === 'playing' || status === 'pristine') return <CgSmileNeutral />;
+        return status === 'won' ? <CgSmileMouthOpen fill="yellow" /> : <CgSmileSad />;
     }
 
     return (

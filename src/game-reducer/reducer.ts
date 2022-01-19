@@ -6,11 +6,11 @@ import { Minefield } from '../models/Minefield';
 import createMinefield from '../utilities/MinefieldBuilder';
 import { MinefieldSettings } from '../models/MinefieldSettings';
 
+export type GameStatus = 'pristine' | 'playing' | 'lost' | 'won';
+
 export interface GameState {
     minefield: Minefield;
-    enabled: boolean; //disabled when game won or lost
-    isPlaying: boolean; //when first field clicked - until reset
-    won: boolean;
+    status: GameStatus;
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -32,10 +32,8 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
 function resetGame(settings: MinefieldSettings): GameState {
     return {
-        isPlaying: false,
-        won: false,
-        enabled: true,
         minefield: createMinefield(settings),
+        status: 'pristine',
     };
 }
 
@@ -44,6 +42,7 @@ function markField(state: GameState, field: Field): GameState {
     fieldClone.marked = !fieldClone.marked;
     return {
         ...state,
+        status: 'playing',
         minefield: minefieldClone,
     };
 }
@@ -55,14 +54,11 @@ function pressField(state: GameState, field: Field): GameState {
         ...state,
         minefield: minefieldClone,
     };
-    if (!state.isPlaying) {
-        newState.isPlaying = true;
-    }
+    newState.status = 'playing';
     if (!mineRevealed) {
-        newState.enabled = false;
+        newState.status = 'lost';
     } else if (noMinesLeft(minefieldClone)) {
-        newState.enabled = false;
-        newState.won = true;
+        newState.status = 'won';
     }
     return newState;
 }

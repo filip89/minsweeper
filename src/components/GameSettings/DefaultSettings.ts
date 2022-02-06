@@ -1,9 +1,9 @@
 import { MinefieldSettings } from '../../models/MinefieldSettings';
 
 const defaultSettings: MinefieldSettings = {
-    rows: 20,
+    rows: 15,
     columns: 30,
-    mines: 90,
+    mines: 60,
 };
 
 export default defaultSettings;

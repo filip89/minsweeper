@@ -4,6 +4,11 @@ import './GameSettings.scss';
 import './DefaultSettings';
 import defaultSettings from './DefaultSettings';
 import { MinefieldSettings } from '../../models/MinefieldSettings';
+import { getInRange, Range } from '../../utilities/getInRange';
+
+const columnsRange: Range = { min: 2, max: 50 };
+const rowsRange: Range = { min: 2, max: 30 };
+const minMines = 1;
 
 export interface GameSettingsProps {
     onApply: (settings: MinefieldSettings) => void;
@@ -13,32 +18,13 @@ const GameSettings: React.FC<GameSettingsProps> = ({ onApply }) => {
     const { register, handleSubmit, setValue } = useForm();
 
     function onSubmit(settings: MinefieldSettings): void {
-        settings.rows = getAdjustedAxisLength(settings.rows);
-        settings.columns = getAdjustedAxisLength(settings.columns);
-        settings.mines = getAdjustedMineCount(settings);
+        settings.rows = getInRange(settings.rows, rowsRange);
+        settings.columns = getInRange(settings.columns, columnsRange);
+        settings.mines = getInRange(settings.mines, { min: minMines, max: settings.rows * settings.columns - 1 });
         setValue('rows', settings.rows);
         setValue('columns', settings.columns);
         setValue('mines', settings.mines);
         onApply(settings);
-    }
-
-    function getAdjustedAxisLength(length: number): number {
-        if (length > 99) {
-            return 99;
-        } else if (length < 0) {
-            return 1;
-        }
-        return length;
-    }
-
-    function getAdjustedMineCount({ rows, columns, mines }: MinefieldSettings): number {
-        const fieldsCount = rows * columns;
-        if (mines >= fieldsCount) {
-            return fieldsCount - 1;
-        } else if (mines < 1) {
-            return 1;
-        }
-        return mines;
     }
 
     return (
